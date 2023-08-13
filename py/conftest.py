@@ -114,22 +114,22 @@ def driver(request):
 
     global driver_instance
     if driver_instance is None:
-        if driver_class == "Firefox":
-            options = get_options(driver_class, request.config)
-        if driver_class == "Chrome":
-            options = get_options(driver_class, request.config)
-        if driver_class == "Remote":
-            options = get_options("Firefox", request.config) or webdriver.FirefoxOptions()
-        if driver_class == "WebKitGTK":
-            options = get_options(driver_class, request.config)
-        if driver_class == "Edge":
-            options = get_options(driver_class, request.config)
-        if driver_class == "WPEWebKit":
-            options = get_options(driver_class, request.config)
         if driver_path is not None:
             kwargs["service"] = get_service(driver_class, driver_path)
         if options is not None:
             kwargs["options"] = options
+        if driver_class == "Firefox":
+            options = get_options(driver_class, request.config)
+        elif driver_class == "Chrome":
+            options = get_options(driver_class, request.config)
+        elif driver_class == "Remote":
+            options = get_options("Firefox", request.config) or webdriver.FirefoxOptions()
+        elif driver_class == "WebKitGTK":
+            options = get_options(driver_class, request.config)
+        elif driver_class == "Edge":
+            options = get_options(driver_class, request.config)
+        elif driver_class == "WPEWebKit":
+            options = get_options(driver_class, request.config)
 
         driver_instance = getattr(webdriver, driver_class)(**kwargs)
     yield driver_instance
@@ -164,7 +164,7 @@ def get_options(driver_class, config):
 
         if driver_class == "Chrome" or driver_class == "Edge":
             options.add_argument("--headless=new")
-        if driver_class == "Firefox":
+        elif driver_class == "Firefox":
             options.add_argument("-headless")
     return options
 
@@ -233,7 +233,7 @@ def server(request):
                 return 1
             except OSError:
                 time.sleep(0.2)
-        return 0
+        return 0 #no error
 
     _socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     url = f"http://{_host}:{_port}/status"
@@ -270,3 +270,8 @@ def edge_service():
     from selenium.webdriver.edge.service import Service as EdgeService
 
     return EdgeService
+    
+# step 1: mkdir selenium + cd selenium 
+# step 2: git clone https://github.com/SeleniumHQ/selenium/edit/trunk/py/conftest.py  
+# step 3: pip3 install -r requirements.txt
+# step 4: in your vscode terminal, execute python3 conftest.py 
