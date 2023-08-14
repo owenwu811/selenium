@@ -13,7 +13,7 @@ mv build/web web
 
 git add -A web
 
-read -p "Do you want to commit the changes? (Y/n):" changes </dev/tty
+read -p "Do you want to commit the changes? (Y/N):" changes </dev/tty
 
 if [ -z $changes ]; then
   changes=Y
